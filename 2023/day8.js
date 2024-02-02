@@ -1,18 +1,51 @@
 'strict'
-const fs = require('fs');
-const path = require('path');
+const AOC = require('./AOC')
 
-const file_name = 'input.txt'
-const input_path = path.join(__dirname, file_name)
+AOC.setDay(8)
+AOC.loadInput()
 
-fs.readFile(input_path, 'utf8', (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
+AOC.part1(() => {
+  const file_lines = AOC.lines
+  const directions = file_lines.shift()
+  var first_node = "AAA"
+  file_lines.shift()
+
+  // build graph
+  const map = new Map()
+
+  file_lines.forEach((line) => {
+    const [node, left_right] = line.split(" = ")
+    const [left, right] = left_right.replace("(", "").replace(")", "").split(", ")
+    
+    map.set(node, [left, right])
+
+  })
+
+  var searching = true
+  var current_node = first_node
+  var count = 0
+
+  while (searching) {
+    for (let i = 0; i < directions.length; i++) {
+      const direction = directions.charAt(i)
+      const left_right_array = map.get(current_node)
+      
+      current_node = direction == "L" ? left_right_array[0] : left_right_array[1]
+
+      count ++
+
+      if (current_node == "ZZZ") {
+        searching = false
+        break
+      }
+    }
   }
-  var total = -1
 
-  const file_lines = data.split('\n')
+  return count // 14893
+});
+
+AOC.part2(() => {
+  const file_lines = AOC.lines
   const directions = file_lines.shift()
   file_lines.shift()
 
@@ -75,7 +108,5 @@ fs.readFile(input_path, 'utf8', (err, data) => {
     }
   }
 
-  console.log(count) // 219849
+  return count // 100 000 000 - 1 000 000 000
 });
-
-// 100 000 000 - 1 000 000 000

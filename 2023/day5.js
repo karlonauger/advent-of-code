@@ -1,26 +1,14 @@
 'strict'
-const fs = require('fs');
-const path = require('path');
+const AOC = require('./AOC')
 
-const file_name = 'input.txt'
-const input_path = path.join(__dirname, file_name)
+AOC.setDay(5)
 
-fs.readFile(input_path, 'utf8', (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  var total = 0;
+AOC.part1(() => {
   var maps = []
 
-  const file_lines = data.split('\n')
+  const seed_array = AOC.lines.shift().split("seeds: ")[1].split(" ")
 
-  const seed_array = file_lines.shift().split("seeds: ")[1].split(" ")
-  console.log(seed_array)
-
-  file_lines.forEach((line) => { 
-    console.log(line)
-
+  AOC.lines.forEach((line) => { 
     if (line.length == 0) {
       //Skip empty lines
     } else if (isNaN(parseFloat(line.charAt(0)))) { // Reached new map
@@ -34,14 +22,9 @@ fs.readFile(input_path, 'utf8', (err, data) => {
     }
   });
 
-  console.log(maps)
-
   var min_location = -1
 
-  for (i = 0; i < seed_array.length(); i+2) {
-    const seed_start = seed_array[i]
-    const seed_range = seed_array[i+1]
-    console.log(`seed: ${seed}`)
+  seed_array.forEach((seed) => {
     var tracker = parseFloat(seed)
 
     maps.forEach((map) => {
@@ -58,8 +41,6 @@ fs.readFile(input_path, 'utf8', (err, data) => {
           }
         }
       })
-
-      console.log(`Tracker: ${tracker}`)
     })
     
     if (min_location == -1) {
@@ -69,5 +50,5 @@ fs.readFile(input_path, 'utf8', (err, data) => {
     }
   })
 
-  console.log(min_location) // 21959
+  return min_location // 535088217
 });

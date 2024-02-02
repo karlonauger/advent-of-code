@@ -1,12 +1,9 @@
 'strict'
-const fs = require('fs');
-const path = require('path');
+const AOC = require('./AOC')
 
-const file_name = 'input.txt'
-const input_path = path.join(__dirname, file_name)
+AOC.setDay(10)
 
 const map = new Map()
-
 map.set("up")
 map.set("up|", "up")
 map.set("up7", "left")
@@ -32,7 +29,7 @@ function follow(matrix, location, direction) {
     } else if (new_pipe == "7") {
       follow(matrix, new_location, "up")
     }
-  } offset[0] == -1 && ["|", "7", "F"].includes(neighbor)) { // Up
+  } else if (offset[0] == -1 && ["|", "7", "F"].includes(neighbor)) { // Up
     follow(pipe_matrix, start_location, "up")
   } else if (offset[0] == 1 && ["|", "J", "L"].includes(neighbor)) { // Down
     follow(pipe_matrix, start_location, "down")
@@ -43,17 +40,11 @@ function follow(matrix, location, direction) {
   }
 }
 
-fs.readFile(input_path, 'utf8', (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  var total = -1
-
+AOC.part1(() => {
   // build matrix graph
-  const file_lines = data.split('\n')
-  const pipe_matrix = file_lines.map((line) => {
-    line.split("")
+  
+  const pipe_matrix = AOC.lines.map((line) => {
+    return line.split("")
   })
 
   var start_location = [0,0]
@@ -87,7 +78,7 @@ fs.readFile(input_path, 'utf8', (err, data) => {
   
   for (r = 0; r < 3; r++) {
     for (c = 0; c < 3; c++) {
-      if (["|", "7", "F"].includes(pipe_matrix(r,c))
+      //if (["|", "7", "F"].includes(pipe_matrix(r,c))
     }  
   }
 
@@ -112,7 +103,7 @@ fs.readFile(input_path, 'utf8', (err, data) => {
     }
   }
 
-  console.log(count) // 14893
+  return count // 14893
 });
 
 // 10000 - 692677 

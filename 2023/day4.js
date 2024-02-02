@@ -1,22 +1,33 @@
 'strict'
-const fs = require('fs');
-const path = require('path');
+const AOC = require('./AOC')
 
-const file_name = 'input.txt'
-const input_path = path.join(__dirname, file_name)
+AOC.setDay(4)
 
-fs.readFile(input_path, 'utf8', (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
+AOC.part1(() => {
+  var total = 0
+
+  AOC.lines.forEach((line) => { 
+    var line_total = 0
+    const [winning_nums, my_nums] = line.split(": ")[1].split(" | ").map((nums) => nums.split(" ").filter(n => n))
+
+    winning_nums.forEach((winning_num) => {
+      if (my_nums.find((item) => item == winning_num)) {
+        line_total = line_total == 0 ? 1 : line_total * 2
+      }
+    });
+
+    total += line_total
+  });
+
+  return total // 21959
+});
+
+AOC.part2(() => {
   var total = 0;
   var results_array = []
 
-  const data_matrix = data.split('\n')
-
   // Need to run in reverse to because later results accumulate up
-  data_matrix.reverse().forEach((line) => { 
+  AOC.lines.reverse().forEach((line) => { 
     var line_total = 1
     var total_wins = 0
 
@@ -39,5 +50,5 @@ fs.readFile(input_path, 'utf8', (err, data) => {
     total += line_total
   });
 
-  console.log(total) // 5132675
+  return total // 5132675
 });
