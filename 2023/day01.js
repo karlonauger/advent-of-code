@@ -1,113 +1,69 @@
 'strict'
-const AOC = require('./AOC')
+const AOC = require('./AOC');
 
-AOC.setDay(1)
+AOC.setDay(1);
 
-AOC.part1(() => {
+const numberWordsMap = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+  "four": 4,
+  "five": 5,
+  "six": 6,
+  "seven": 7,
+  "eight": 8,
+  "nine": 9,
+};
+
+function findNum(line, location, isStart, isSimple) {
+  var c = line.charAt(location);
+  if (!isNaN(parseFloat(c))) {
+    return c;
+  }
+
+  if (isSimple) {
+    return null;
+  }
+
+  for (const word in numberWordsMap) {
+    if ((isStart && line.startsWith(word, location)) || (!isStart && line.endsWith(word, location+1))) {
+      return numberWordsMap[word];
+    }
+  }
+
+  return null;
+}
+
+function findFirst(line, isSimple) {
+  for (var i = 0; i < line.length; i++) {
+    var found = findNum(line, i, true, isSimple);
+    if (found !== null) {
+      return found;
+    }
+  }
+}
+
+function findLast(line, isSimple) {
+  for (var i = line.length - 1; i >= 0; i--) {
+    var found = findNum(line, i, false, isSimple);
+    if (found !== null) {
+      return found;
+    }
+  }
+}
+
+function sumLines(isSimple) {
   var total = 0
 
-  AOC.lines.forEach((item_string) => {
-    var first = 0
-    var last = 0
+  AOC.lines.forEach((line) => {
+    var first = findFirst(line, isSimple);
+    var last = findLast(line, isSimple);
 
-    for (var i = 0; i < item_string.length; i++) {
-      var c = item_string.charAt(i);
-      if (!isNaN(parseFloat(c))) {
-        first = c
-        break
-      }
-    }
-    for (var i = item_string.length - 1; i >= 0; i--) {
-      var c = item_string.charAt(i);
-      if (!isNaN(parseFloat(c))) {
-        last = c
-        break
-      }
-    }
-    total += parseFloat(`${first}${last}`)
+    total += parseFloat(`${first}${last}`);
   });
 
-  return total
-});
+  return total;
+}
 
-AOC.part2(() => {
-  var total = 0;
-
-  AOC.lines.forEach((item_string) => {
-    var first = 0
-    var last = 0
-
-    for (var i = 0; i < item_string.length; i++) {
-      var c = item_string.charAt(i);
-      if (!isNaN(parseFloat(c))) {
-        first = c
-        break
-      } else if (item_string.startsWith("one", i)) {
-        first = 1
-        break
-      } else if (item_string.startsWith("two", i)) {
-        first = 2
-        break
-      } else if (item_string.startsWith("three", i)) {
-        first = 3
-        break
-      } else if (item_string.startsWith("four", i)) {
-        first = 4
-        break
-      } else if (item_string.startsWith("five", i)) {
-        first = 5
-        break
-      } else if (item_string.startsWith("six", i)) {
-        first = 6
-        break
-      } else if (item_string.startsWith("seven", i)) {
-        first = 7
-        break
-      } else if (item_string.startsWith("eight", i)) {
-        first = 8
-        break
-      } else if (item_string.startsWith("nine", i)) {
-        first = 9
-        break
-      }
-    }
-    for (var i = item_string.length - 1; i >= 0; i--) {
-      var c = item_string.charAt(i);
-      if (!isNaN(parseFloat(c))) {
-        last = c
-        break
-      } else if (item_string.endsWith("one", i+1)) {
-        last = 1
-        break
-      } else if (item_string.endsWith("two", i+1)) {
-        last = 2
-        break
-      } else if (item_string.endsWith("three", i+1)) {
-        last = 3
-        break
-      } else if (item_string.endsWith("four", i+1)) {
-        last = 4
-        break
-      } else if (item_string.endsWith("five", i+1)) {
-        last = 5
-        break
-      } else if (item_string.endsWith("six", i+1)) {
-        last = 6
-        break
-      } else if (item_string.endsWith("seven", i+1)) {
-        last = 7
-        break
-      } else if (item_string.endsWith("eight", i+1)) {
-        last = 8
-        break
-      } else if (item_string.endsWith("nine", i+1)) {
-        last = 9
-        break
-      }
-    }
-
-    total += parseFloat(`${first}${last}`)
-  });
-  
-  return total
-});
+AOC.part1(() => { return sumLines(true) });  // 53974
+AOC.part2(() => { return sumLines(false) }); // 52840
