@@ -1,14 +1,15 @@
-'strict'
-const AOC = require('./AOC')
+'strict';
 
-AOC.setDay(7)
+const AOC = require('./AOC');
+
+AOC.setDay(7);
 
 AOC.part1(() => {
-  var total = -1
+  const total = -1;
 
   AOC.lines.forEach((line) => {
-    const [hand, bid] = line.split(" ")
-  })
+    const [hand, bid] = line.split(' ');
+  });
 
-  return total
+  return total;
 });

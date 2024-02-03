@@ -1,60 +1,60 @@
-'strict'
-const AOC = require('./AOC')
+'strict';
 
-AOC.setDay(2)
+const AOC = require('./AOC');
 
-const cubes = { red: 12, green: 13, blue: 14 }
+AOC.setDay(2);
 
 AOC.part1(() => {
-  var total = 0;
-  var game = 0;
+  const cubes = { red: 12, green: 13, blue: 14 };
+  let total = 0;
+  let game = 0;
 
   AOC.lines.forEach((line) => {
-    game++
-    var valid = true
+    game += 1;
+    let valid = true;
 
-    var sets = line.split(': ')[1].split('; ')
+    const sets = line.split(': ')[1].split('; ');
     sets.forEach((set) => {
-      var spheres = set.split(', ')
+      const spheres = set.split(', ');
       spheres.forEach((sphere) => {
-        var [count, color] = sphere.split(" ")
+        const [count, color] = sphere.split(' ');
 
         if (!(count <= cubes[color])) {
           // Fail
-          valid = false
+          valid = false;
         }
-      })
+      });
     });
 
     if (valid) {
-      total += game
+      total += game;
     }
   });
 
-  return total
+  return total;
 });
 
 AOC.part2(() => {
-  var total = 0;
+  const cubes = { red: 0, green: 0, blue: 0 };
+  let total = 0;
 
   AOC.lines.forEach((line) => {
-    var cubes = { red: 0, green: 0, blue: 0 }
-    var sets = line.split(': ')[1].split('; ')
+    const sets = line.split(': ')[1].split('; ');
 
     sets.forEach((set) => {
-      var spheres = set.split(', ')
+      const spheres = set.split(', ');
 
       spheres.forEach((sphere) => {
-        var [count, color] = sphere.split(" ")
-        
+        const [count, color] = sphere.split(' ');
+
         if (cubes[color] < count) {
-          cubes[color] = parseFloat(count)
+          cubes[color] = parseFloat(count);
         }
-      })
+      });
     });
 
     total += Object.values(cubes).reduce((a, b) => a * b);
   });
-  
-  return total
+
+  return total;
 });

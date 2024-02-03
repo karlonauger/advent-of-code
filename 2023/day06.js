@@ -1,52 +1,51 @@
-'strict'
-const AOC = require('./AOC')
+'strict';
 
-AOC.setDay(6)
+const AOC = require('./AOC');
+
+AOC.setDay(6);
 
 AOC.part1(() => {
-  var total = -1
+  let total = -1;
 
-  const file_lines = AOC.lines
+  const fileLines = AOC.lines;
 
-  const time_array = file_lines.shift().split("Time:      ")[1].split(" ").filter(n => n)
-  const distance_array = file_lines.shift().split("Distance:  ")[1].split(" ").filter(n => n)
+  const timeArray = fileLines.shift().split('Time:      ')[1].split(' ').filter((n) => n);
+  const distanceArray = fileLines.shift().split('Distance:  ')[1].split(' ').filter((n) => n);
 
-  for (i = 0; i < time_array.length; i++) {
-    const time = parseFloat(time_array[i])
-    const distance = parseFloat(distance_array[i])
+  for (let i = 0; i < timeArray.length; i += 1) {
+    const time = parseFloat(timeArray[i]);
+    const distance = parseFloat(distanceArray[i]);
 
-    var wins = 0
+    let wins = 0;
 
-    for (t = 0; t <= time; t++) {
+    for (let t = 0; t <= time; t += 1) {
       if (distance < ((time - t) * t)) {
-        wins++
+        wins += 1;
       }
     }
 
-    if (total == -1) {
-      total = wins
+    if (total === -1) {
+      total = wins;
     } else {
-      total *= wins
+      total *= wins;
     }
   }
 
-  return total // 219849
+  return total; // 219849
 });
 
 AOC.part2(() => {
-  const file_lines = AOC.lines
-  // time: 44707080
-  const time = parseFloat(file_lines.shift().split("Time:      ")[1].replaceAll(" ", ""))
-  const distance = parseFloat(file_lines.shift().split("Distance:  ")[1].replaceAll(" ", ""))
+  const fileLines = AOC.lines;
+  const time = parseFloat(fileLines.shift().split('Time:      ')[1].replaceAll(' ', ''));
+  const distance = parseFloat(fileLines.shift().split('Distance:  ')[1].replaceAll(' ', ''));
 
-  var total = 0
+  let total = 0;
 
-  for (t = 0; t <= time; t++) { // Brute Force approach worked with time = 44707080
-    //console.log(`d: ${distance} t: ${time} : ${(time - t) * t} : ${distance < ((time - t) * t)}`)
+  for (let t = 0; t <= time; t += 1) {
     if (distance <= ((time - t) * t)) {
-      total++
+      total += 1;
     }
   }
 
-  return total // 29432455
+  return total; // 29432455
 });

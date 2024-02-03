@@ -1,54 +1,55 @@
-'strict'
-const AOC = require('./AOC')
+'strict';
 
-AOC.setDay(5)
+const AOC = require('./AOC');
+
+AOC.setDay(5);
 
 AOC.part1(() => {
-  var maps = []
+  const maps = [];
 
-  const seed_array = AOC.lines.shift().split("seeds: ")[1].split(" ")
+  const seedArray = AOC.lines.shift().split('seeds: ')[1].split(' ');
 
-  AOC.lines.forEach((line) => { 
-    if (line.length == 0) {
-      //Skip empty lines
-    } else if (isNaN(parseFloat(line.charAt(0)))) { // Reached new map
-      maps.push([])
+  AOC.lines.forEach((line) => {
+    if (line.length === 0) {
+      // Skip empty lines
+    } else if (Number.isNaN(Number(line.charAt(0)))) { // Reached new map
+      maps.push([]);
     } else {
-      const range_map = line.split(" ")
-      const dest_start = parseFloat(range_map[0])
-      const source_start = parseFloat(range_map[1])
-      const range_length = parseFloat(range_map[2])
-      maps.at(-1).push(range_map)
+      const rangeMap = line.split(' ');
+      // const destStart = parseFloat(rangeMap[0]);
+      // const sourceStart = parseFloat(rangeMap[1]);
+      // const rangeLength = parseFloat(rangeMap[2]);
+      maps.at(-1).push(rangeMap);
     }
   });
 
-  var min_location = -1
+  let minLocation = -1;
 
-  seed_array.forEach((seed) => {
-    var tracker = parseFloat(seed)
+  seedArray.forEach((seed) => {
+    let tracker = parseFloat(seed);
 
     maps.forEach((map) => {
-      var search = true
-      map.forEach((range_map) => {
+      let search = true;
+      map.forEach((rangeMap) => {
         if (search) {
-          const dest_start = parseFloat(range_map[0])
-          const source_start = parseFloat(range_map[1])
-          const range_length = parseFloat(range_map[2])
-  
-          if (source_start <= tracker && tracker <= source_start + range_length) {
-            tracker = tracker - source_start + dest_start
-            search = false
+          const destStart = parseFloat(rangeMap[0]);
+          const sourceStart = parseFloat(rangeMap[1]);
+          const rangeLength = parseFloat(rangeMap[2]);
+
+          if (sourceStart <= tracker && tracker <= sourceStart + rangeLength) {
+            tracker = tracker - sourceStart + destStart;
+            search = false;
           }
         }
-      })
-    })
-    
-    if (min_location == -1) {
-      min_location = tracker
-    } else if (tracker < min_location) {
-      min_location = tracker
-    }
-  })
+      });
+    });
 
-  return min_location // 535088217
+    if (minLocation === -1) {
+      minLocation = tracker;
+    } else if (tracker < minLocation) {
+      minLocation = tracker;
+    }
+  });
+
+  return minLocation; // 535088217
 });

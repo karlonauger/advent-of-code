@@ -1,63 +1,63 @@
-'strict'
+'strict';
+
 const AOC = require('./AOC');
 
 AOC.setDay(1);
 
 const numberWordsMap = {
-  "one": 1,
-  "two": 2,
-  "three": 3,
-  "four": 4,
-  "five": 5,
-  "six": 6,
-  "seven": 7,
-  "eight": 8,
-  "nine": 9,
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
 };
 
-function findNum(line, location, isStart, isSimple) {
-  var c = line.charAt(location);
-  if (!isNaN(parseFloat(c))) {
+function findNum(line, loc, isStart, isSimple) {
+  const c = line.charAt(loc);
+  if (!Number.isNaN(Number(c))) {
     return c;
   }
 
-  if (isSimple) {
-    return null;
-  }
+  const foundWord = Object.keys(numberWordsMap)
+    .find((word) => (isStart && line.startsWith(word, loc))
+      || (!isStart && line.endsWith(word, loc + 1)));
 
-  for (const word in numberWordsMap) {
-    if ((isStart && line.startsWith(word, location)) || (!isStart && line.endsWith(word, location+1))) {
-      return numberWordsMap[word];
-    }
+  if (foundWord && isSimple) {
+    return numberWordsMap[foundWord];
   }
-
   return null;
 }
 
 function findFirst(line, isSimple) {
-  for (var i = 0; i < line.length; i++) {
-    var found = findNum(line, i, true, isSimple);
+  for (let i = 0; i < line.length; i += 1) {
+    const found = findNum(line, i, true, isSimple);
     if (found !== null) {
       return found;
     }
   }
+  return null;
 }
 
 function findLast(line, isSimple) {
-  for (var i = line.length - 1; i >= 0; i--) {
-    var found = findNum(line, i, false, isSimple);
+  for (let i = line.length - 1; i >= 0; i -= 1) {
+    const found = findNum(line, i, false, isSimple);
     if (found !== null) {
       return found;
     }
   }
+  return null;
 }
 
 function sumLines(isSimple) {
-  var total = 0
+  let total = 0;
 
   AOC.lines.forEach((line) => {
-    var first = findFirst(line, isSimple);
-    var last = findLast(line, isSimple);
+    const first = findFirst(line, isSimple);
+    const last = findLast(line, isSimple);
 
     total += parseFloat(`${first}${last}`);
   });
@@ -65,5 +65,5 @@ function sumLines(isSimple) {
   return total;
 }
 
-AOC.part1(() => { return sumLines(true) });  // 53974
-AOC.part2(() => { return sumLines(false) }); // 52840
+AOC.part1(() => sumLines(true)); // 53974
+AOC.part2(() => sumLines(false)); // 52840
