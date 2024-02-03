@@ -4,17 +4,15 @@ const AOC = require('./AOC');
 
 AOC.setDay(6);
 
+const times = AOC.lines[0].split(/\s+/).slice(1).map(Number);
+const distances = AOC.lines[1].split(/\s+/).slice(1).map(Number);
+
 AOC.part1(() => {
   let total = -1;
 
-  const fileLines = AOC.lines;
-
-  const timeArray = fileLines.shift().split('Time:      ')[1].split(' ').filter((n) => n);
-  const distanceArray = fileLines.shift().split('Distance:  ')[1].split(' ').filter((n) => n);
-
-  for (let i = 0; i < timeArray.length; i += 1) {
-    const time = parseFloat(timeArray[i]);
-    const distance = parseFloat(distanceArray[i]);
+  for (let i = 0; i < times.length; i += 1) {
+    const time = times[i];
+    const distance = distances[i];
 
     let wins = 0;
 
@@ -24,20 +22,15 @@ AOC.part1(() => {
       }
     }
 
-    if (total === -1) {
-      total = wins;
-    } else {
-      total *= wins;
-    }
+    total = (total === -1) ? wins : total * wins;
   }
 
   return total; // 219849
 });
 
 AOC.part2(() => {
-  const fileLines = AOC.lines;
-  const time = parseFloat(fileLines.shift().split('Time:      ')[1].replaceAll(' ', ''));
-  const distance = parseFloat(fileLines.shift().split('Distance:  ')[1].replaceAll(' ', ''));
+  const time = times.join('');
+  const distance = distances.join('');
 
   let total = 0;
 
