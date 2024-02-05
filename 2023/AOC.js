@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const axios = require('axios');
 const fs = require('fs');
@@ -32,12 +32,12 @@ const AOC = {
   get lines() {
     this.loadInput();
     // Need to wait for file promis to resolve
-    return this.input.split('\n').filter(line => line !== '');
+    return this.input.split('\n').filter((line) => line !== '');
   },
 
   get lineSections() {
     this.loadInput();
-    return this.input.split('\n\n').map(section => section.split('\n').filter(line => line !== ''));
+    return this.input.split('\n\n').map((section) => section.split('\n').filter((line) => line !== ''));
   },
 
   get getInput() {
@@ -56,31 +56,30 @@ const AOC = {
   loadInputSync(day) {
     if (fs.existsSync(this.inputPath)) {
       return fs.readFileSync(this.inputPath, 'utf8');
-    } else {
-      return this.downloadFile(day);
     }
+    return this.downloadFile(day);
   },
 
   downloadFile(day) {
     console.log('>> downloading input for the first time');
 
     const url = `https://adventofcode.com/${this.YEAR}/day/${day}/input`;
-    const headers = { 'Cookie': `session=${process.env.AOC_SESSION}` };
+    const headers = { Cookie: `session=${process.env.AOC_SESSION}` };
 
     return axios.get(url, { headers })
-      .then(response => {
+      .then((response) => {
         const input = response.data;
         fs.writeFileSync(this.inputPath, input);
         return input;
       })
-      .catch(error => {
+      .catch((error) => {
         throw new Error(`Error fetching puzzle input: ${error.message}`);
       });
   },
 
   log(message) {
     console.log(`❄️  ${message}`);
-  }
+  },
 };
 
 module.exports = AOC;
