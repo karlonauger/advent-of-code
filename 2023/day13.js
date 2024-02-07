@@ -6,15 +6,6 @@ AOC.setDay(13);
 
 const mirrors = AOC.lineSections;
 
-function findMirror(mirror, targetMismatch) {
-  for (let r = 0; r < mirror.length - 1; r++) {
-    const rowMismatch = checkReflection(mirror, r);
-    if (rowMismatch === targetMismatch) {
-      return r + 1;
-    }
-  }
-}
-
 function checkReflection(mirror, row) {
   return Array.from({ length: row + 1 }, (_, offset) => {
     const upper = row - offset;
@@ -34,6 +25,14 @@ function checkReflection(mirror, row) {
   }).reduce((sum, mismatch) => sum + mismatch, 0);
 }
 
+function findMirror(mirror, targetMismatch) {
+  for (let r = 0; r < mirror.length - 1; r += 1) {
+    const rowMismatch = checkReflection(mirror, r);
+    if (rowMismatch === targetMismatch) { return r + 1; }
+  }
+  return 0;
+}
+
 function transpose(matrix) {
   return matrix[0].map((_, i) => matrix.map((row) => row[i]));
 }
@@ -44,13 +43,17 @@ function findReflectingCol(mirror, mismatch) {
 }
 
 function summarize(mismatch) {
-  const rows = mirrors.map((mirror) => findMirror(mirror, mismatch))
-    .filter(Number).reduce((sum, row) => sum + row, 0);
+  const rows = mirrors
+    .map((mirror) => findMirror(mirror, mismatch))
+    .filter(Number)
+    .reduce((sum, row) => sum + row, 0);
 
-  const cols = mirrors.map((mirror) => findReflectingCol(mirror, mismatch))
-    .filter(Number).reduce((sum, col) => sum + col, 0);
+  const cols = mirrors
+    .map((mirror) => findReflectingCol(mirror, mismatch))
+    .filter(Number)
+    .reduce((sum, col) => sum + col, 0);
   return cols + 100 * rows;
 }
 
-AOC.part1(() => summarize(0));
-AOC.part2(() => summarize(1));
+AOC.part1(() => summarize(0)); // 37025
+AOC.part2(() => summarize(1)); // 36735
