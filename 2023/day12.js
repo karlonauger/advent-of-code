@@ -4,46 +4,34 @@ const AOC = require('./AOC');
 
 AOC.setDay(12);
 
-function isValidArrangement(row, expectedDamagedGroups) {
-  // Check if the arrangement satisfies the damagedGroups criteria
-  const damagedGroups = [0];
-  for (let i = 0; i < row.length; i += 1) {
-    if (row[i] === '#') {
-      damagedGroups[damagedGroups.length - 1] += 1;
-    }
-    if (row[i] === '.' && damagedGroups[damagedGroups.length - 1] !== 0) {
-      damagedGroups.push(0);
-    }
-  }
+const cache = {};
 
-  if (damagedGroups[damagedGroups.length - 1] === 0) { damagedGroups.pop(); }
-
-  return JSON.stringify(damagedGroups) === JSON.stringify(expectedDamagedGroups);
+function trimStart(str) {
+  return str.startsWith('.') ? str.split(/(?<=\.)(?=[^.])/).slice(1).join('') : str;
 }
 
-function countArrangements(row, damagedGroups) {
-  let count = 0;
+function findCombinations(row, groups) {
+  const line = `${row} ${groups.join(',')}`;
+  if (cache[line]) return cache[line];
 
-  function dfs(currentRow) {
-    const index = currentRow.indexOf('?');
-    if (index === -1) {
-      // All damaged groups have been filled, check if the arrangement is valid
-      if (isValidArrangement(currentRow, damagedGroups)) {
-        count += 1;
-      }
-      return;
-    }
+  if (groups.length <= 0) return Number(!row.includes('#'));
 
-    // Replace the damaged group at the current index with operational springs
-    dfs(`${currentRow.substring(0, index)}.${currentRow.substring(index + 1)}`);
+  if (row.length - groups.reduce((a, b) => a + b) - groups.length + 1 < 0) return 0;
 
-    // Replace the damaged group at the current index with broken springs
-    dfs(`${currentRow.substring(0, index)}#${currentRow.substring(index + 1)}`);
+  const damagedOrUnknown = !row.slice(0, groups[0]).includes('.');
+  if (row.length === groups[0]) return Number(damagedOrUnknown);
+
+  let optOne = 0;
+  let optTwo = 0;
+  if (row[0] !== '#') {
+    optOne = findCombinations(trimStart(row.slice(1)), groups);
   }
+  if (damagedOrUnknown && row[groups[0]] !== '#') {
+    optTwo = findCombinations(trimStart(row.slice(groups[0] + 1)), groups.slice(1));
+  }
+  cache[line] ??= optOne + optTwo;
 
-  dfs(row);
-
-  return count;
+  return cache[line];
 }
 
 function calculateTotalArrangements(rows) {
@@ -53,10 +41,28 @@ function calculateTotalArrangements(rows) {
     const [springRow, damagedGroupsStr] = row.split(' ');
     const damagedGroups = damagedGroupsStr.split(',').map(Number);
 
-    totalArrangements += countArrangements(springRow, damagedGroups);
+    totalArrangements += findCombinations(springRow, damagedGroups);
   });
 
   return totalArrangements;
 }
 
 AOC.part1(() => calculateTotalArrangements(AOC.lines)); // 8180
+
+function unfoldRecords(rows) {
+  const unfoldedRows = [];
+
+  rows.forEach((row) => {
+    const [springRow, damagedGroupsStr] = row.split(' ');
+    const damagedGroups = damagedGroupsStr.split(',').map(Number);
+
+    const unfoldedSpringRow = Array.from({ length: 5 }, (_, index) => (index > 0 ? `?${springRow}` : springRow)).join('');
+    const unfoldedDamagedGroups = Array.from({ length: 5 }, () => [...damagedGroups]).flat();
+
+    unfoldedRows.push(`${unfoldedSpringRow} ${unfoldedDamagedGroups}`);
+  });
+
+  return unfoldedRows;
+}
+
+AOC.part2(() => calculateTotalArrangements(unfoldRecords(AOC.lines)));
