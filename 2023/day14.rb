@@ -92,5 +92,3 @@ loop_size = current_cycle - loop_start
 remaining_cycles = (1_000_000_000 - current_cycle) % loop_size
 
 puts "part 2 : #{load(states[loop_start + remaining_cycles])}" # 106390
-
-
